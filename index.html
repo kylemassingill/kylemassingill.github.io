@@ -1,37 +1,767 @@
----
-layout: default
-title: Home
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kyle D. Massingill, PhD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal: #1D9E75;
+      --teal-light: #E1F5EE;
+      --teal-mid: #5DCAA5;
+      --teal-dark: #0F6E56;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-light: #9ca3af;
+      --bg: #fafaf9;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+    }
 
-<div class="posts">
-  {% for post in paginator.posts %}
-  <div class="post">
-    <h1 class="post-title">
-      <a href="{{ post.url }}">
-        {{ post.title }}
-      </a>
-    </h1>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <span class="post-date">{{ post.date | date_to_string }}</span>
+    html { scroll-behavior: smooth; }
 
-    {{ post.content }}
-  </div>
-  {% endfor %}
-</div>
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.7;
+    }
 
-<div class="pagination">
-  {% if paginator.next_page %}
-    <a class="pagination-item older" href="{{ site.baseurl }}page{{paginator.next_page}}">Older</a>
-  {% else %}
-    <span class="pagination-item older">Older</span>
-  {% endif %}
-  {% if paginator.previous_page %}
-    {% if paginator.page == 2 %}
-      <a class="pagination-item newer" href="{{ site.baseurl }}">Newer</a>
-    {% else %}
-      <a class="pagination-item newer" href="{{ site.baseurl }}page{{paginator.previous_page}}">Newer</a>
-    {% endif %}
-  {% else %}
-    <span class="pagination-item newer">Newer</span>
-  {% endif %}
-</div>
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: rgba(250,250,249,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-light);
+      z-index: 100;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--teal); }
+
+    /* LAYOUT */
+    .container { max-width: 820px; margin: 0 auto; padding: 0 2rem; }
+
+    section { padding: 5rem 0; }
+
+    /* HERO */
+    #hero {
+      padding-top: 120px;
+      padding-bottom: 5rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .hero-inner { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: start; }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      background: var(--teal-light);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+    }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+    .hero-bio {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 580px;
+      line-height: 1.75;
+    }
+    .hero-cta {
+      display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--teal);
+      color: #fff;
+      border: 1px solid var(--teal);
+    }
+    .btn-primary:hover { background: var(--teal-dark); border-color: var(--teal-dark); }
+    .btn-outline {
+      background: transparent;
+      color: var(--teal-dark);
+      border: 1px solid var(--teal-mid);
+    }
+    .btn-outline:hover { background: var(--teal-light); }
+
+    .hero-badge {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;
+      padding-top: 0.5rem;
+    }
+    .affiliation-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      text-align: right;
+      min-width: 180px;
+    }
+    .affiliation-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    .affiliation-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* SECTION TITLES */
+    .section-header { margin-bottom: 3rem; }
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--teal);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.9rem;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    /* DIVIDER */
+    .section-divider { border: none; border-top: 1px solid var(--border-light); }
+
+    /* HEADSHOT */
+    .headshot-wrap {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      border: 3px solid var(--teal-light);
+      overflow: hidden;
+      flex-shrink: 0;
+      background: var(--teal-light);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .headshot-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .headshot-placeholder {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--teal-dark);
+      user-select: none;
+    }
+    .hero-top {
+      display: flex; align-items: center; gap: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    /* RESEARCH */
+    .research-grid { display: grid; gap: 1.25rem; }
+    .research-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .research-card:hover {
+      border-color: var(--teal-mid);
+      box-shadow: 0 4px 20px rgba(29, 158, 117, 0.07);
+    }
+    .research-area {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--teal-dark);
+      background: var(--teal-light);
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+    }
+    .research-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+    .research-card p { font-size: 0.95rem; color: var(--text-muted); }
+
+    /* TEACHING */
+    .teaching-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .teaching-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .teaching-card:hover { border-color: var(--teal-mid); }
+    .teaching-role {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+      margin-bottom: 0.35rem;
+    }
+    .teaching-card h3 {
+      font-size: 0.98rem;
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+    .teaching-card .teaching-inst {
+      font-size: 0.85rem;
+      color: var(--teal-dark);
+      margin-bottom: 0.5rem;
+    }
+    .teaching-card p { font-size: 0.88rem; color: var(--text-muted); }
+
+    /* MEDIA GALLERY */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .media-item {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: border-color 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .media-item:hover { border-color: var(--teal-mid); transform: translateY(-2px); }
+    .media-thumb {
+      width: 100%; aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+      background: var(--teal-light);
+    }
+    .media-placeholder {
+      width: 100%; aspect-ratio: 4/3;
+      background: var(--teal-light);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 0.5rem;
+    }
+    .media-placeholder svg { width: 28px; height: 28px; fill: var(--teal-mid); }
+    .media-placeholder span { font-size: 0.78rem; color: var(--teal-dark); }
+    .media-caption {
+      padding: 0.75rem 1rem;
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 640px) {
+      .teaching-grid { grid-template-columns: 1fr; }
+    }
+
+    /* PUBLICATIONS */
+    .pub-list { list-style: none; display: grid; gap: 1.5rem; }
+    .pub-item {
+      border-left: 3px solid var(--teal-mid);
+      padding-left: 1.25rem;
+    }
+    .pub-meta {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.35rem;
+    }
+    .pub-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    .pub-authors { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* EXPERIENCE */
+    .timeline { display: grid; gap: 2rem; }
+    .timeline-item { display: grid; grid-template-columns: 130px 1fr; gap: 1.5rem; }
+    .timeline-date {
+      font-size: 0.82rem;
+      color: var(--text-light);
+      padding-top: 4px;
+      font-weight: 400;
+    }
+    .timeline-content h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.15rem;
+    }
+    .timeline-org {
+      font-size: 0.88rem;
+      color: var(--teal-dark);
+      margin-bottom: 0.5rem;
+    }
+    .timeline-desc { font-size: 0.92rem; color: var(--text-muted); }
+    .timeline-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+      display: inline-block;
+      margin-right: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    /* CONTACT */
+    #contact { background: var(--surface); border-top: 1px solid var(--border-light); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    .contact-links { list-style: none; display: grid; gap: 1rem; margin-top: 1.5rem; }
+    .contact-link-item a {
+      display: flex; align-items: center; gap: 0.75rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .contact-link-item a:hover { color: var(--teal); }
+    .contact-icon {
+      width: 36px; height: 36px;
+      background: var(--teal-light);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-icon svg { width: 16px; height: 16px; fill: var(--teal-dark); }
+
+    .contact-form { display: grid; gap: 1rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.65rem 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--teal-mid);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border-light);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-light);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-badge { align-items: flex-start; }
+      .affiliation-card { text-align: left; }
+      .timeline-item { grid-template-columns: 1fr; gap: 0.25rem; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-name">KDM</a>
+    <ul class="nav-links">
+      <li><a href="#research">Research</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#teaching">Teaching</a></li>
+      <li><a href="#media">Media</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div>
+          <div class="hero-top">
+            <div class="headshot-wrap">
+              <!-- Replace src with your actual headshot image path, e.g. src="headshot.jpg" -->
+              <img src="Massingill_headshot.jpg" alt="Kyle D. Massingill" />
+            </div>
+            <span class="hero-tag">Radio Instrumentation &amp; Astrophysics</span>
+          </div>
+          <h1>Kyle D. Massingill,<br /><em>PhD</em></h1>
+          <p class="hero-bio">
+            Jansky Fellow at the National Radio Astronomy Observatory. I design and test millimeter-wave filter-banks for novel atmospheric sensors, survey high-redshift galaxies with ALMA, and study how quasar feedback regulates galaxy evolution.
+          </p>
+          <div class="hero-cta">
+            <a href="cv.pdf" class="btn btn-primary" download>Download CV</a>
+            <a href="#contact" class="btn btn-outline">Get in Touch</a>
+            <a href="https://orcid.org/0000-0002-0830-2033" class="btn btn-primary" >Astro Water Vapor Seminar</a>
+          </div>
+        </div>
+        <div class="hero-badge">
+          <div class="affiliation-card">
+            <span class="affiliation-label">Current Position</span>
+            <span class="affiliation-name">Jansky Fellow</span>
+          </div>
+          <div class="affiliation-card" style="margin-top:0.75rem;">
+            <span class="affiliation-label">Institution</span>
+            <span class="affiliation-name">NRAO &mdash; Socorro, NM</span>
+          </div>
+          <div class="affiliation-card" style="margin-top:0.75rem;">
+            <span class="affiliation-label">PhD</span>
+            <span class="affiliation-name">Arizona State University</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section id="research">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Areas of Work</span>
+        <h2>Research</h2>
+      </div>
+      <div class="research-grid">
+        <div class="research-card">
+          <span class="research-area">Instrumentation</span>
+          <h3>Millimeter-Wave Filter-Bank Design</h3>
+          <p>Design, simulation, and fabrication of mm-wave filter-banks integrated into novel weather sensors. Tested on high-altitude balloon platforms for atmospheric profiling.</p>
+        </div>
+        <div class="research-card">
+          <span class="research-area">Extragalactic Astronomy</span>
+          <h3>High-Redshift Galaxy Surveys</h3>
+          <p>Using ALMA interferometric data to characterize the molecular gas and dust properties of galaxies in the early universe, tracing cosmic star formation history.</p>
+        </div>
+        <div class="research-card">
+          <span class="research-area">Galaxy Evolution</span>
+          <h3>Quasar Feedback &amp; Galaxy Regulation</h3>
+          <p>Investigating how feedback from luminous quasars shapes and suppresses star formation, exploring the role of AGN in regulating the growth of their host galaxies.</p>
+        </div>
+        <div class="research-card">
+          <span class="research-area">Atmospheric Science</span>
+          <h3>Radiometric Retrieval Methods</h3>
+          <p>Developing and refining algorithms for atmospheric calibration and radiometric retrievals, with applications to ground-based and airborne microwave radiometry at NRAO.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- PUBLICATIONS -->
+  <section id="publications">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Selected Works</span>
+        <h2>Publications</h2>
+      </div>
+      <ul class="pub-list">
+        <li class="pub-item">
+          <div class="pub-meta">2024 &mdash; Journal Article</div>
+          <div class="pub-title">Publication Title Placeholder &mdash; Replace with your first publication</div>
+          <div class="pub-authors">Massingill, K. D., et al. &mdash; <em>Journal Name</em></div>
+        </li>
+        <li class="pub-item">
+          <div class="pub-meta">2023 &mdash; Conference Proceedings</div>
+          <div class="pub-title">Publication Title Placeholder &mdash; Replace with your second publication</div>
+          <div class="pub-authors">Massingill, K. D., et al. &mdash; <em>Conference Name</em></div>
+        </li>
+        <li class="pub-item">
+          <div class="pub-meta">2022 &mdash; Journal Article</div>
+          <div class="pub-title">Publication Title Placeholder &mdash; Replace with your third publication</div>
+          <div class="pub-authors">Massingill, K. D., et al. &mdash; <em>Journal Name</em></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Background</span>
+        <h2>Experience</h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">2024 &ndash; Present</div>
+          <div class="timeline-content">
+            <h3>Jansky Fellow</h3>
+            <div class="timeline-org">National Radio Astronomy Observatory &mdash; Socorro, NM</div>
+            <p class="timeline-desc">Focused on radiometric retrieval methods and atmospheric calibration for ground-based and airborne microwave instrumentation.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2019 &ndash; 2024</div>
+          <div class="timeline-content">
+            <h3>PhD, Astrophysics</h3>
+            <div class="timeline-org">Arizona State University</div>
+            <p class="timeline-desc">Dissertation focused on millimeter-wave filter-bank design, simulation, and testing. Integrated filter-banks into weather sensors tested on high-altitude balloon flights.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2015 &ndash; 2019</div>
+          <div class="timeline-content">
+            <h3>BS, Physics</h3>
+            <div class="timeline-org">University of Arizona</div>
+            <p class="timeline-desc">Undergraduate degree in physics, building a foundation in electromagnetism, quantum mechanics, and observational astronomy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- TEACHING -->
+  <section id="teaching">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Education &amp; Mentorship</span>
+        <h2>Teaching</h2>
+      </div>
+      <div class="teaching-grid">
+        <div class="teaching-card">
+          <div class="teaching-role">Teaching Assistant</div>
+          <h3>Introductory Astronomy</h3>
+          <div class="teaching-inst">Arizona State University</div>
+          <p>Led weekly lab sections and helped students develop foundational skills in observational astronomy and data interpretation.</p>
+        </div>
+        <div class="teaching-card">
+          <div class="teaching-role">Course Instructor</div>
+          <h3>Physics for Scientists &amp; Engineers</h3>
+          <div class="teaching-inst">Arizona State University</div>
+          <p>Placeholder &mdash; update with your actual course, role, and description.</p>
+        </div>
+        <div class="teaching-card">
+          <div class="teaching-role">Guest Lecturer</div>
+          <h3>Radio Astronomy &amp; Instrumentation</h3>
+          <div class="teaching-inst">NRAO / Socorro</div>
+          <p>Placeholder &mdash; update with your actual course, role, and description.</p>
+        </div>
+        <div class="teaching-card">
+          <div class="teaching-role">Mentorship</div>
+          <h3>Undergraduate Research Mentoring</h3>
+          <div class="teaching-inst">Arizona State University</div>
+          <p>Mentored undergraduate students on independent research projects in mm-wave instrumentation and data analysis.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- MEDIA -->
+  <section id="media">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Photos &amp; Gallery</span>
+        <h2>Media</h2>
+      </div>
+      <div class="media-grid">
+        <!-- To add a real image: replace <div class="media-placeholder">...</div> with <img class="media-thumb" src="images/your-photo.jpg" alt="description" /> -->
+        <div class="media-item">
+          <div class="media-placeholder">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <span>Add photo here</span>
+          </div>
+          <div class="media-caption">Caption placeholder &mdash; e.g. High-altitude balloon launch, Tucson AZ, 2023</div>
+        </div>
+        <div class="media-item">
+          <div class="media-placeholder">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <span>Add photo here</span>
+          </div>
+          <div class="media-caption">Caption placeholder &mdash; e.g. Filter-bank chip under test, ASU lab, 2022</div>
+        </div>
+        <div class="media-item">
+          <div class="media-placeholder">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <span>Add photo here</span>
+          </div>
+          <div class="media-caption">Caption placeholder &mdash; e.g. Very Large Array, NRAO Socorro, 2024</div>
+        </div>
+        <div class="media-item">
+          <div class="media-placeholder">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <span>Add photo here</span>
+          </div>
+          <div class="media-caption">Caption placeholder &mdash; e.g. Conference presentation, AAS 2023</div>
+        </div>
+        <div class="media-item">
+          <div class="media-placeholder">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <span>Add photo here</span>
+          </div>
+          <div class="media-caption">Caption placeholder &mdash; e.g. ALMA array, Chile field trip, 2023</div>
+        </div>
+        <div class="media-item">
+          <div class="media-placeholder">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <span>Add photo here</span>
+          </div>
+          <div class="media-caption">Caption placeholder &mdash; add your own photo and description</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Get in Touch</span>
+        <h2>Contact</h2>
+      </div>
+      <div class="contact-grid">
+        <div>
+          <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 340px;">
+            Interested in collaborating, discussing research, or just want to say hello? Feel free to reach out.
+          </p>
+          <ul class="contact-links">
+            <li class="contact-link-item">
+              <a href="mailto:kmassing@nrao.edu">
+                <span class="contact-icon">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                </span>
+                kmassing@nrao.edu
+              </a>
+            </li>
+            <li class="contact-link-item">
+              <a href="https://scholar.google.com/citations?user=jmn_5MYAAAAJ" target="_blank" rel="noopener">
+                <span class="contact-icon">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 10a8 8 0 0 1 7.162 3.44L24 9.5z"/></svg>
+                </span>
+                Google Scholar Profile
+              </a>
+            </li>
+            <li class="contact-link-item">
+              <a href="https://orcid.org/0000-0002-0830-2033" target="_blank" rel="noopener">
+                <span class="contact-icon">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.016-5.325 5.016h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 4.022-2.484 4.022-3.722 0-2.016-1.284-3.722-4.097-3.722h-2.222z"/></svg>
+                </span>
+                ORCID Profile
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <form class="contact-form" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="your@email.com" />
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="4" placeholder="What would you like to discuss?"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; text-align:center;">Send Message</button>
+            <p id="form-status" style="font-size:0.85rem; color: var(--teal-dark); display:none; text-align:center; margin-top:0.5rem;">
+              Thanks! Your message has been sent.
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Kyle D. Massingill, PhD &mdash; Built with GitHub Pages</p>
+  </footer>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      document.getElementById('form-status').style.display = 'block';
+      e.target.reset();
+    }
+
+    // Smooth active nav highlighting
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.style.color = link.getAttribute('href') === '#' + entry.target.id
+              ? 'var(--teal)'
+              : '';
+          });
+        }
+      });
+    }, { threshold: 0.4 });
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>
