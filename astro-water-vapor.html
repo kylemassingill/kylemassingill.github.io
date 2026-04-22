@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Astro Water Vapor — Seminar Series</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal: #1D9E75;
+      --teal-light: #E1F5EE;
+      --teal-mid: #5DCAA5;
+      --teal-dark: #0F6E56;
+      --text: #1a1a1a;
+      --text-muted: #6b7280;
+      --text-light: #9ca3af;
+      --bg: #fafaf9;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: rgba(250,250,249,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-light);
+      z-index: 100;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--teal); }
+    .nav-back svg { width: 14px; height: 14px; fill: currentColor; }
+
+    /* LAYOUT */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 2rem; }
+    section { padding: 5rem 0; }
+
+    /* HERO */
+    #hero {
+      padding-top: 120px;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      background: var(--teal-light);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+    }
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+    }
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+    .hero-meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+    }
+    .hero-meta-item {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+    .hero-meta-item svg { width: 15px; height: 15px; fill: var(--teal-mid); flex-shrink: 0; }
+
+    /* SECTION HEADER */
+    .section-header { margin-bottom: 2.5rem; }
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--teal);
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.9rem;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    /* FILTER TABS */
+    .filter-row {
+      display: flex; gap: 0.5rem; flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .filter-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #fff;
+    }
+
+    /* SPEAKER TABLE */
+    .speaker-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 0.6rem;
+    }
+    .speaker-table thead th {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-light);
+      font-weight: 500;
+      padding: 0 1.25rem 0.5rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .speaker-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .speaker-row:hover {
+      border-color: var(--teal-mid);
+      box-shadow: 0 4px 16px rgba(29,158,117,0.07);
+    }
+    .speaker-row td {
+      padding: 1.1rem 1.25rem;
+      vertical-align: middle;
+    }
+    .speaker-row td:first-child { border-radius: 10px 0 0 10px; }
+    .speaker-row td:last-child  { border-radius: 0 10px 10px 0; }
+
+    .speaker-date {
+      font-size: 0.82rem;
+      color: var(--text-light);
+      white-space: nowrap;
+      min-width: 100px;
+    }
+    .speaker-name {
+      font-weight: 500;
+      font-size: 0.98rem;
+      color: var(--text);
+    }
+    .speaker-affil {
+      font-size: 0.83rem;
+      color: var(--teal-dark);
+      margin-top: 0.15rem;
+    }
+    .speaker-talk {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .speaker-status {
+      text-align: right;
+      white-space: nowrap;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .badge-upcoming {
+      background: var(--teal-light);
+      color: var(--teal-dark);
+    }
+    .badge-past {
+      background: var(--border-light);
+      color: var(--text-light);
+    }
+    .badge-tbd {
+      background: #fef9ec;
+      color: #92620a;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--text-light);
+      font-size: 0.95rem;
+      display: none;
+    }
+
+    /* ABOUT STRIP */
+    #about {
+      background: var(--surface);
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+    .about-item { padding: 0.5rem 0; }
+    .about-item-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-light);
+      margin-bottom: 0.35rem;
+    }
+    .about-item-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border-light);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-light);
+    }
+    footer a { color: var(--teal-dark); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* DIVIDER */
+    .section-divider { border: none; border-top: 1px solid var(--border-light); }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .speaker-table thead { display: none; }
+      .speaker-row, .speaker-row td {
+        display: block;
+        border-radius: 0 !important;
+      }
+      .speaker-row {
+        border-radius: 10px !important;
+        margin-bottom: 0.6rem;
+      }
+      .speaker-status { text-align: left; }
+      .hero-meta { flex-direction: column; gap: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-name">KDM</a>
+    <ul class="nav-links">
+      <li><a href="#speakers">Speakers</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      Back to Portfolio
+    </a>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container">
+      <span class="hero-tag">Seminar Series</span>
+      <h1>Astro Water Vapor</h1>
+      <p class="hero-desc">
+        A seminar series connecting the communities of atmospheric science, astronomy, and remote sensing.
+      </p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          Virtual
+        </div>
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+          Ongoing &mdash; 2024 &ndash; Present
+        </div>
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          Organizer: Kyle Massingill
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPEAKERS -->
+  <section id="speakers">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Schedule</span>
+        <h2>Speakers</h2>
+      </div>
+
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="filterSpeakers('all', this)">All</button>
+        <button class="filter-btn" onclick="filterSpeakers('upcoming', this)">Upcoming</button>
+        <button class="filter-btn" onclick="filterSpeakers('past', this)">Past</button>
+      </div>
+
+      <table class="speaker-table" id="speaker-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Speaker</th>
+            <th>Talk Title</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- ── UPCOMING ── -->
+          <tr class="speaker-row" data-status="upcoming">
+            <td class="speaker-date">May 14, 2025</td>
+            <td>
+              <div class="speaker-name">Speaker Name</div>
+              <div class="speaker-affil">Institution / Affiliation</div>
+            </td>
+            <td class="speaker-talk">Talk title placeholder — update with real title</td>
+            <td class="speaker-status"><span class="badge badge-upcoming">Upcoming</span></td>
+          </tr>
+
+          <tr class="speaker-row" data-status="upcoming">
+            <td class="speaker-date">Jun 4, 2025</td>
+            <td>
+              <div class="speaker-name">Speaker Name</div>
+              <div class="speaker-affil">Institution / Affiliation</div>
+            </td>
+            <td class="speaker-talk">Talk title placeholder — update with real title</td>
+            <td class="speaker-status"><span class="badge badge-upcoming">Upcoming</span></td>
+          </tr>
+
+          <tr class="speaker-row" data-status="upcoming">
+            <td class="speaker-date">TBD</td>
+            <td>
+              <div class="speaker-name">Speaker Name</div>
+              <div class="speaker-affil">Institution / Affiliation</div>
+            </td>
+            <td class="speaker-talk">Talk title placeholder — update with real title</td>
+            <td class="speaker-status"><span class="badge badge-tbd">TBD</span></td>
+          </tr>
+
+          <!-- ── PAST ── -->
+          <tr class="speaker-row" data-status="past">
+            <td class="speaker-date">Apr 2, 2025</td>
+            <td>
+              <div class="speaker-name">Speaker Name</div>
+              <div class="speaker-affil">Institution / Affiliation</div>
+            </td>
+            <td class="speaker-talk">Talk title placeholder — update with real title</td>
+            <td class="speaker-status"><span class="badge badge-past">Past</span></td>
+          </tr>
+
+          <tr class="speaker-row" data-status="past">
+            <td class="speaker-date">Mar 12, 2025</td>
+            <td>
+              <div class="speaker-name">Speaker Name</div>
+              <div class="speaker-affil">Institution / Affiliation</div>
+            </td>
+            <td class="speaker-talk">Talk title placeholder — update with real title</td>
+            <td class="speaker-status"><span class="badge badge-past">Past</span></td>
+          </tr>
+
+          <tr class="speaker-row" data-status="past">
+            <td class="speaker-date">Feb 19, 2025</td>
+            <td>
+              <div class="speaker-name">Speaker Name</div>
+              <div class="speaker-affil">Institution / Affiliation</div>
+            </td>
+            <td class="speaker-talk">Talk title placeholder — update with real title</td>
+            <td class="speaker-status"><span class="badge badge-past">Past</span></td>
+          </tr>
+
+          <tr class="speaker-row" data-status="past">
+            <td class="speaker-date">Jan 22, 2025</td>
+            <td>
+              <div class="speaker-name">Speaker Name</div>
+              <div class="speaker-affil">Institution / Affiliation</div>
+            </td>
+            <td class="speaker-talk">Talk title placeholder — update with real title</td>
+            <td class="speaker-status"><span class="badge badge-past">Past</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+      <div class="empty-state" id="empty-state">No speakers in this category yet.</div>
+    </div>
+  </section>
+
+  <!-- ABOUT STRIP -->
+  <section id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Series Info</span>
+        <h2>About the Series</h2>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.97rem; max-width: 600px; margin-bottom: 2.5rem;">
+        The Astro Water Vapor seminar was started for two main reasons. The first is we noticed a lot of astronomy teams were independently working on similar atmospheric mitigations strategies. We thought a seminar series would be a great way for groups to compare notes and reduce the duplication of effort. The second reason was to create the opportunity for interdisciplinary collaboration between astronomers and remote sensing/atmospheric experts.  
+      </p>
+      <div class="about-grid">
+        <div class="about-item">
+          <div class="about-item-label">Frequency</div>
+          <div class="about-item-value">Bi-Weekly</div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-label">Location</div>
+          <div class="about-item-value">Virtual</div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-label">Contact</div>
+          <div class="about-item-value"><a href="mailto:kmassing@nrao.edu" style="color:var(--teal-dark); text-decoration:none;">kmassing@nrao.edu</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Astro Water Vapor &mdash; Organized by <a href="index.html">Kyle Massingill</a> &mdash; NRAO</p>
+  </footer>
+
+  <script>
+    function filterSpeakers(status, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const rows = document.querySelectorAll('.speaker-row');
+      let visible = 0;
+      rows.forEach(row => {
+        const show = status === 'all' || row.dataset.status === status;
+        row.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      document.getElementById('empty-state').style.display = visible === 0 ? 'block' : 'none';
+    }
+  </script>
+
+</body>
+</html>
