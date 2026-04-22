@@ -175,6 +175,54 @@
     /* DIVIDER */
     .section-divider { border: none; border-top: 1px solid var(--border-light); }
 
+    /* LIGHTBOX */
+    .media-item { cursor: zoom-in; }
+    .lightbox-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 200;
+      align-items: center; justify-content: center;
+      padding: 2rem;
+      cursor: zoom-out;
+    }
+    .lightbox-overlay.open { display: flex; }
+    .lightbox-inner {
+      position: relative;
+      max-width: 860px;
+      width: 100%;
+      animation: lbFadeIn 0.2s ease;
+    }
+    @keyframes lbFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .lightbox-img {
+      width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 10px;
+      display: block;
+    }
+    .lightbox-caption {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      line-height: 1.5;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: -2.5rem; right: 0;
+      background: none; border: none;
+      color: rgba(255,255,255,0.7);
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    .lightbox-close:hover { color: #fff; }
+
     /* HEADSHOT */
     .headshot-wrap {
       width: 110px; height: 110px;
@@ -451,12 +499,12 @@
           </div>
           <h1>Kyle D. Massingill,<br /><em>PhD</em></h1>
           <p class="hero-bio">
-            Jansky Fellow at the National Radio Astronomy Observatory. I design and test millimeter-wave filter-banks for novel atmospheric sensors, survey high-redshift galaxies with ALMA, and study how quasar feedback regulates galaxy evolution.
+            Jansky Fellow at the National Radio Astronomy Observatory. I design and test millimeter-wave and centimeter-wave instruments, with a particular focus on atmospheric monitoring for ground based astronomy. I also study high-redshift galaxies to improve our understanding of how quasar feedback regulates galaxy evolution.
           </p>
           <div class="hero-cta">
             <a href="cv.pdf" class="btn btn-primary" download>Download CV</a>
             <a href="#contact" class="btn btn-outline">Get in Touch</a>
-            <a href="https://orcid.org/0000-0002-0830-2033" class="btn btn-primary" >Astro Water Vapor Seminar</a>
+            <a href="astro-water-vapor.html" class="btn btn-primary" >Astro Water Vapor Seminar</a>
           </div>
         </div>
         <div class="hero-badge">
@@ -486,14 +534,9 @@
       </div>
       <div class="research-grid">
         <div class="research-card">
-          <span class="research-area">Instrumentation</span>
-          <h3>Millimeter-Wave Filter-Bank Design</h3>
-          <p>Design, simulation, and fabrication of mm-wave filter-banks integrated into novel weather sensors. Tested on high-altitude balloon platforms for atmospheric profiling.</p>
-        </div>
-        <div class="research-card">
-          <span class="research-area">Extragalactic Astronomy</span>
-          <h3>High-Redshift Galaxy Surveys</h3>
-          <p>Using ALMA interferometric data to characterize the molecular gas and dust properties of galaxies in the early universe, tracing cosmic star formation history.</p>
+          <span class="research-area">Atmospheric Calibration</span>
+          <h3>Phase Correction for Ground-Based Instruments</h3>
+          <p>Development of strategies for the calibration of tropospheric water vapor using atmospheric siumulations and water vapor radiometry.</p>
         </div>
         <div class="research-card">
           <span class="research-area">Galaxy Evolution</span>
@@ -501,9 +544,9 @@
           <p>Investigating how feedback from luminous quasars shapes and suppresses star formation, exploring the role of AGN in regulating the growth of their host galaxies.</p>
         </div>
         <div class="research-card">
-          <span class="research-area">Atmospheric Science</span>
-          <h3>Radiometric Retrieval Methods</h3>
-          <p>Developing and refining algorithms for atmospheric calibration and radiometric retrievals, with applications to ground-based and airborne microwave radiometry at NRAO.</p>
+          <span class="research-area">Instrumentation</span>
+          <h3>Millimeter-Wave Filter-Bank Designs</h3>
+          <p>Design, simulation, and fabrication of mm-wave filter-banks integrated into novel weather sensors. Tested on high-altitude balloon platforms for atmospheric profiling.</p>
         </div>
       </div>
     </div>
@@ -520,19 +563,19 @@
       </div>
       <ul class="pub-list">
         <li class="pub-item">
+          <div class="pub-meta">2026 &mdash; Preprint</div>
+          <div class="pub-title">CubeSounder: Low SWaP-C 180 GHz Radiometer for Atmospheric Sensing Tested on High Altitude Balloons</div>
+          <div class="pub-authors">Massingill, K. D., et al. &mdash; <em>arXiv.2602.23338, Submitted to IEEE TIM</em></div>
+        </li>
+        <li class="pub-item">
           <div class="pub-meta">2024 &mdash; Journal Article</div>
-          <div class="pub-title">Publication Title Placeholder &mdash; Replace with your first publication</div>
-          <div class="pub-authors">Massingill, K. D., et al. &mdash; <em>Journal Name</em></div>
+          <div class="pub-title">Observational Constraints on Sunyaev&mdash;Zeldovich Effect Halos around High-z Quasars</div>
+          <div class="pub-authors">Massingill, K. D., et al. &mdash; <em>ApJ 969 56</em></div>
         </li>
         <li class="pub-item">
-          <div class="pub-meta">2023 &mdash; Conference Proceedings</div>
-          <div class="pub-title">Publication Title Placeholder &mdash; Replace with your second publication</div>
-          <div class="pub-authors">Massingill, K. D., et al. &mdash; <em>Conference Name</em></div>
-        </li>
-        <li class="pub-item">
-          <div class="pub-meta">2022 &mdash; Journal Article</div>
-          <div class="pub-title">Publication Title Placeholder &mdash; Replace with your third publication</div>
-          <div class="pub-authors">Massingill, K. D., et al. &mdash; <em>Journal Name</em></div>
+          <div class="pub-meta">2019 &mdash; Journal Article</div>
+          <div class="pub-title">First M87 Event Horizon Telescope Results. I. The Shadow of the Supermassive Black Hole</div>
+          <div class="pub-authors">The Event Horizon Telescope Collaboration et al. &mdash; <em>ApJL 875 L1</em></div>
         </li>
       </ul>
     </div>
@@ -553,23 +596,23 @@
           <div class="timeline-content">
             <h3>Jansky Fellow</h3>
             <div class="timeline-org">National Radio Astronomy Observatory &mdash; Socorro, NM</div>
-            <p class="timeline-desc">Focused on radiometric retrieval methods and atmospheric calibration for ground-based and airborne microwave instrumentation.</p>
+            <p class="timeline-desc">Working on atmospheric calibration in preparation for the ngVLA. Understanding the atmosphere at relevant sites using meterological data, simulation and instrumentation.</p>
           </div>
         </div>
         <div class="timeline-item">
           <div class="timeline-date">2019 &ndash; 2024</div>
           <div class="timeline-content">
-            <h3>PhD, Astrophysics</h3>
+            <h3>Graduate Researcher</h3>
             <div class="timeline-org">Arizona State University</div>
-            <p class="timeline-desc">Dissertation focused on millimeter-wave filter-bank design, simulation, and testing. Integrated filter-banks into weather sensors tested on high-altitude balloon flights.</p>
+            <p class="timeline-desc">PhD in Astrophysics. Dissertation focused on millimeter-wave filter-bank design, simulation, and testing. Integrated filter-banks into weather sensors tested on high-altitude balloon flights.</p>
           </div>
         </div>
         <div class="timeline-item">
-          <div class="timeline-date">2015 &ndash; 2019</div>
+          <div class="timeline-date">2018 &ndash; 2019</div>
           <div class="timeline-content">
-            <h3>BS, Physics</h3>
-            <div class="timeline-org">University of Arizona</div>
-            <p class="timeline-desc">Undergraduate degree in physics, building a foundation in electromagnetism, quantum mechanics, and observational astronomy.</p>
+            <h3>Reserach Technician</h3>
+            <div class="timeline-org">University of Arizona Steward Observatory</div>
+            <p class="timeline-desc">Contribute to the Event Horizon Telescope by preparing equipment required to retrofit the South Pole Telescope for Very Long Baseline Interferometry</p>
           </div>
         </div>
       </div>
@@ -587,28 +630,16 @@
       </div>
       <div class="teaching-grid">
         <div class="teaching-card">
-          <div class="teaching-role">Teaching Assistant</div>
-          <h3>Introductory Astronomy</h3>
-          <div class="teaching-inst">Arizona State University</div>
-          <p>Led weekly lab sections and helped students develop foundational skills in observational astronomy and data interpretation.</p>
-        </div>
-        <div class="teaching-card">
           <div class="teaching-role">Course Instructor</div>
-          <h3>Physics for Scientists &amp; Engineers</h3>
-          <div class="teaching-inst">Arizona State University</div>
-          <p>Placeholder &mdash; update with your actual course, role, and description.</p>
-        </div>
-        <div class="teaching-card">
-          <div class="teaching-role">Guest Lecturer</div>
-          <h3>Radio Astronomy &amp; Instrumentation</h3>
-          <div class="teaching-inst">NRAO / Socorro</div>
-          <p>Placeholder &mdash; update with your actual course, role, and description.</p>
+          <h3>Introductory Physics II</h3>
+          <div class="teaching-inst">University of New Mexico</div>
+          <p>Instructor for second semester undergraduate calculus based physics, focused on electrictiy and magnetism.</p>
         </div>
         <div class="teaching-card">
           <div class="teaching-role">Mentorship</div>
           <h3>Undergraduate Research Mentoring</h3>
-          <div class="teaching-inst">Arizona State University</div>
-          <p>Mentored undergraduate students on independent research projects in mm-wave instrumentation and data analysis.</p>
+          <div class="teaching-inst">NRAO, ASU &amp; UofA</div>
+          <p>Mentored more than ten undergraduate students on research projects both informally and as part of institutional mentorship programs.</p>
         </div>
       </div>
     </div>
@@ -627,45 +658,39 @@
         <!-- To add a real image: replace <div class="media-placeholder">...</div> with <img class="media-thumb" src="images/your-photo.jpg" alt="description" /> -->
         <div class="media-item">
           <div class="media-placeholder">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-            <span>Add photo here</span>
+            <img class="media-thumb" src="images/CS_A_KDM.jpg" alt="description" />
           </div>
-          <div class="media-caption">Caption placeholder &mdash; e.g. High-altitude balloon launch, Tucson AZ, 2023</div>
+          <div class="media-caption">CubeSounder integration into high-altitude balloon vehicle, Tucson AZ, 2023</div>
         </div>
         <div class="media-item">
           <div class="media-placeholder">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-            <span>Add photo here</span>
+            <img class="media-thumb" src="images/VLA_B_landscape.jpg" alt="description" />
           </div>
-          <div class="media-caption">Caption placeholder &mdash; e.g. Filter-bank chip under test, ASU lab, 2022</div>
+          <div class="media-caption">Very Large Array, Plains of San Agustin, New Mexico, 2025</div>
         </div>
         <div class="media-item">
           <div class="media-placeholder">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-            <span>Add photo here</span>
+            <img class="media-thumb" src="images/NOEMA_A.jpg" alt="description" />
           </div>
-          <div class="media-caption">Caption placeholder &mdash; e.g. Very Large Array, NRAO Socorro, 2024</div>
+          <div class="media-caption">NOEMA, Plateau de Bure, France, 2025</div>
         </div>
         <div class="media-item">
           <div class="media-placeholder">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-            <span>Add photo here</span>
+            <img class="media-thumb" src="images/NSRC_B_group.jpg" alt="description" />
           </div>
-          <div class="media-caption">Caption placeholder &mdash; e.g. Conference presentation, AAS 2023</div>
+          <div class="media-caption">ASU team at NSRC, Boulder Colordado, 2023</div>
         </div>
         <div class="media-item">
           <div class="media-placeholder">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-            <span>Add photo here</span>
+            <img class="media-thumb" src="images/ISSTT_A_KDM.jpg" alt="description" />
           </div>
-          <div class="media-caption">Caption placeholder &mdash; e.g. ALMA array, Chile field trip, 2023</div>
+          <div class="media-caption">Poster presentation at ISSTT, Santiago Chile, 2026</div>
         </div>
         <div class="media-item">
           <div class="media-placeholder">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-            <span>Add photo here</span>
+            <img class="media-thumb" src="images/CS_B_Box.jpg" alt="description" />
           </div>
-          <div class="media-caption">Caption placeholder &mdash; add your own photo and description</div>
+          <div class="media-caption">CubeSounder instrument enclosure, Tucson AZ, 2023</div>
         </div>
       </div>
     </div>
@@ -735,8 +760,17 @@
     </div>
   </section>
 
+  <!-- LIGHTBOX -->
+  <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-inner" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+      <div id="lightbox-content"></div>
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
+  </div>
+
   <footer>
-    <p>&copy; 2025 Kyle D. Massingill, PhD &mdash; Built with GitHub Pages</p>
+    <p>&copy; 2026 Kyle D. Massingill, PhD &mdash; Built with GitHub Pages</p>
   </footer>
 
   <script>
@@ -761,6 +795,36 @@
       });
     }, { threshold: 0.4 });
     sections.forEach(s => observer.observe(s));
+
+    // Lightbox
+    function openLightbox(item) {
+      const img = item.querySelector('.media-thumb');
+      const caption = item.querySelector('.media-caption')?.innerText || '';
+      const content = document.getElementById('lightbox-content');
+      if (img) {
+        content.innerHTML = `<img class="lightbox-img" src="${img.src}" alt="${img.alt}" />`;
+      }
+      document.getElementById('lightbox-caption').innerText = caption;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(e) {
+      if (e && e.target !== document.getElementById('lightbox') && !e.currentTarget.classList?.contains('lightbox-close')) return;
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.media-item').forEach(item => {
+      item.addEventListener('click', () => openLightbox(item));
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
   </script>
 
 </body>
